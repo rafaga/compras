@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+    <head>
+        <title>Consolidaci&oacute;n de Adquisiciones - Cat&aacute;logo de {{ tipo }}</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{ urls['topcoat'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['compras'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['flexbox'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['simple_table_css'] }}" type="text/css"/>
+    </head>
+    <body class="">
+        <div class="row header middle-xs">
+            <div class="col-lg start-lg"><div class="titulo box" style="padding-left: 1em;">Consolidación de adquisiciones</div></div>
+            <div class="col-xs end-xs "><div class="box" style="text-align: right; padding-right: 1em;">¡Bienvenido(a), {{ session['username'] }}!&nbsp;</div></div>
+            <div class="col-xs-1 middle-xs "><div class="box"><a href="{{ url_for('logout') }}" class="topcoat-button--large">Salir</a></div></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="glass box">
+                    Menu de Opciones
+                    <br/>
+                    <a href="{{ url_for('ver_material') }}">Materiales</a><br/>
+                    <a href="{{ url_for('ver_grupo') }}">Grupos de materiales</a><br/>
+                    <a href="{{ url_for('ver_zona') }}">Zonas</a><br/>
+                    <a href="{{ url_for('ver_departamento') }}">Departamentos</a><br/>
+                    <a href="{{ url_for('periodo_ver') }}">Periodo de Apertura</a><br/>
+                    <br/>
+                    <a href="{{ url_for('captura_solicitud') }}">Capturar solicitud</a><br/>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="glass box">
+                    <h2>Cátalogo de {{ tipo }}</h2>
+                    <hr/>
+                    <table class="table">
+                        <thead>
+                            {% for col in columnas %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </thead>
+                        <tbody>
+                            {% for col in results %}
+                            <tr>{% for val in col %}<td>{{ val }}</td>{% endfor %}</tr>    
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script type="module">
+            import {DataTable} from "{{ urls['simple_table_module'] }}"
+            const table = new DataTable("table")
+        </script>
+    </body>
+</html>

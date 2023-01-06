@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "consad"
+version = "1.0.0-beta4"
+authors = [
+  { name="Rafael Amador", email="rafaga@duck.com" },
+]
+description = "A web Application made in Flask"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: POSIX",
+    "Framework :: Flask",
+]
+dependencies = ['flask','mariadb','sqlalchemy']
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"consad.static" = ["*.jpg"]
+"consad.static.css" = ["*.css"]
+"consad.static.js" = ["*.js","*.map"]
+"consad.static.font" = ["*.woff2"]
+"consad.static.img" = ["*.png","*.svg"]
+"consad.templates" = ["*.*"]
+
+[project.urls]
+"Homepage" = "https://github.com/rafaga/compras"
+"Bug Tracker" = "https://github.com/rafaga/compras/issues"
+

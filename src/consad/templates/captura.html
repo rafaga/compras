@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+    <head>
+        <title>Consolidaci&oacute;n de Adquisiciones - Captura de Solicitudes</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{ urls['topcoat'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['compras'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['flexbox'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['bvselect_css'] }}" type="text/css"/>
+        <link rel="stylesheet" href="{{ urls['simple_table_css'] }}" type="text/css"/>
+    </head>
+    <body class="">
+        <div class="row header middle-xs">
+            <div class="col-lg start-lg"><div class="titulo box" style="padding-left: 1em;">Consolidación de adquisiciones</div></div>
+            <div class="col-xs end-xs "><div class="box" style="text-align: right; padding-right: 1em;">¡Bienvenido(a), {{ session['username'] }}!&nbsp;</div></div>
+            <div class="col-xs-1 middle-xs "><div class="box"><a href="{{ url_for('logout') }}" class="topcoat-button--large">Salir</a></div></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="glass box">
+                    Menu de Opciones
+                    <br/>
+                    <a href="{{ url_for('ver_material') }}">Materiales</a><br/>
+                    <a href="{{ url_for('ver_grupo') }}">Grupos de materiales</a><br/>
+                    <a href="{{ url_for('ver_zona') }}">Zonas</a><br/>
+                    <a href="{{ url_for('ver_departamento') }}">Departamentos</a><br/>
+                    <a href="{{ url_for('periodo_ver') }}">Periodo de Apertura</a><br/>
+                    <br/>
+                    <a href="{{ url_for('captura_solicitud') }}">Capturar solicitud</a><br/>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="glass box">
+                    <h3>Nueva Necesidad</h3>
+                    <div class="row middle-xs">
+                        <div class="col-xs-2 end-xs">
+                            <div class="box"><label for="departamento">Departamento:</label></div>
+                        </div>
+                        <div class="col-xs-2 start-md">
+                            <div class="box"><input type="text" name="departamento" value="{{ session['deptoname'] }}" class="topcoat-text-input--large" disabled="disabled"/></div>
+                        </div>
+                        <div class="col-xs-2 end-xs">
+                            <div class="box"> <label for="zona">Zona:</label></div>
+                        </div>
+                        <div class="col-xs-2 start-md">
+                            <div class="box"><input type="text" name="zona" value="{{ session['zonaname'] }}" class="topcoat-text-input--large" disabled="disabled"/></div>
+                        </div>
+                    </div>
+                    <form id="nuevo" href="#" method="POST">
+                        <div class="row middle-xs with-padding">
+                            <div class="col-xs-2 end-xs ">
+                                <div class="box">A&ntilde;o:</div>
+                            </div>
+                            <div class="col-xs-8 start-xs">
+                                <div class="box">
+                                    <select name="periodo" id="periodo" class="docnav">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row middle-xs">
+                            <div class="col-xs-2 end-xs">
+                                <div class="box">Material:</div>
+                            </div>
+                            <div class="col-xs-10 start-xs">
+                                <div class="box">
+                                    <select id="selectbox" name="material" onchange="javascript:updateUnidad();">
+                                        <option data-separator="true"> Selecciona una opci&oacute;n </option>
+                                        {% for mat in mats %}<option value="{{ mat[0] }}" data-unidad="{{ mat[3] }}">{{ mat[4] }}</option>{% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row middle-xs">
+                            <div class="col-xs-2 end-xs ">
+                                <div class="box">Cantidad:</div>
+                            </div>
+                            <div class="col-xs-4 start-xs">
+                                <div class="box"><input type="number" id="txtCantidad" name="cantidad" value="0" class="topcoat-text-input--large" /></div>
+                            </div>
+                            <div class="col-xs-4 start-xs">
+                                <div class="box"><label for="cantidad" value="" id="unidad"></label></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs center-md">
+                                <div class="box"><input type="reset" id="btnReset" class="topcoat-button--large" />&nbsp;&nbsp;&nbsp;<input type="submit" id="btnSave" class="topcoat-button--large--cta" value="Guardar" ></div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-md center-md">
+                            <div class="box"><hr/></div>
+                        </div>
+                    </div>
+                    <div class="row mddle-md">
+                        <div class="col-md start-md">
+                            <div class="box">
+                                <button class="topcoat-icon-button--large">
+                                    <img class="topcoat-icon--large" onclick="javascript:updateData()" src="/static/img/refresh-w.png"/>
+                                </button>
+                                <button class="topcoat-icon-button--large" id="editValue">
+                                    <img class="topcoat-icon--large" src="/static/img/edit-w.png"/>
+                                </button>
+                                <button class="topcoat-icon-button--large" id="delValue">
+                                    <img class="topcoat-icon--large" src="/static/img/delete-w.png"/>
+                                </button>
+                                &nbsp;&nbsp;&nbsp;A&ntilde;o:&nbsp;
+                                <button class="topcoat-icon-button--large" id="leftBtn" >
+                                    <img class="topcoat-icon--large" src="/static/img/left-w.png"/>
+                                </button>
+                                <select id="periodo-table" class="docnav" >
+                                </select>
+                                <button class="topcoat-icon-button--large" id="rightBtn" >
+                                    <img class="topcoat-icon--large" src="/static/img/right-w.png"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md start-md">
+                            <div class="box">                    
+                                <table class="table" id="datos">
+                                    <thead>
+                                    </thead>
+                                    <tbody class="captura">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <dialog id="dlgBorrar" class="dialog">
+            <form method="dialog">
+            <div class="dialog-header">Confirmaci&oacute;n</div>
+            <div class="dialog-body"><p>¿Esta seguro(a) de querer eliminar este elemento?</p><p style="text-align: center;"><input id="ok-del" type="submit" class="topcoat-button--large--cta" value="Aceptar"/>&nbsp;
+                 <input type="submit" id="cancel-del" class="topcoat-button--large" value="Cancelar"/></p></div>
+            </form>
+        </dialog>
+        <script src="{{ urls['bvselect_js'] }}" type="application/javascript"></script>
+        <script type="module">
+            import {DataTable} from "{{ urls['simple_table_module']}}"
+            let datatable = new DataTable("#datos",{
+                searchable: false,
+                paging: false,
+                rowNavigation: true,
+                columns: [
+                    { select: [1,3,4], type:'number'},
+                    { select: [0,1], hidden: true }]
+            })
+            
+            datatable.on("datatable.selectrow", function(data) {
+                data.event.preventDefault()
+                if (this.selectedRow) {
+                    this.selectedRow.classList.toggle('selected')
+                }
+                this.selectedRow = data.row
+                data.row.classList.toggle('selected')
+            })
+            window.datatable = datatable;
+        </script>
+        <script type="application/javascript">
+            document.addEventListener("DOMContentLoaded", function(event) {
+                window.dataselect = new BVSelect({
+                    selector: "#selectbox",
+                    width: "90%",
+                    searchbox: true,
+                    offset: true,
+                    placeholder: "Selecciona una opción",
+                    search_placeholder: "Buscar...",
+                    search_autofocus: true,
+                    breakpoint: 450
+                });
+               /* */
+                updateData();
+                //TODO:aqui va la llamada al procedimiento de carga del select
+                updateAvailablePeriodo();
+                updatePeriodos(); 
+                
+            });
+
+            updateData = function(){
+                var data = { id_departamento: "{{ session['deptoid'] }}", id_zona: "{{ session['zonaid'] }}" };
+                data.id_periodo=document.getElementById("periodo-table").value;
+                var init = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                };
+                url = "{{ url_for('solicitudes_data') }}"
+                window.datatable.rows.remove("all");
+                fetch(url,init).then(data => data.json()).then(data => { 
+                    datatable.insert(data); 
+                });
+            };
+
+            rebuildOptions = function(id, data){
+                select = document.getElementById(id);
+                let options = select.getElementsByTagName('option');
+                for (var i=options.length; i--;) {
+                    select.removeChild(options[i]);
+                }
+                if (data.success == false){
+                    option = document.createElement("option");
+                    option.setAttribute('hidden','hidden');
+                    option.textContent = 'Sin datos';
+                    select.add(option);
+                }
+                else{
+                    for(var i=0;i<data.data.length;i++){
+                        option = document.createElement("option");
+                        option.value = data.data[i][0];
+                        option.textContent = data.data[i][1];
+                        var activo = 0;
+                        if(data.data[i][5] == true)
+                            activo = 1;
+                        option.setAttribute('data-activo',activo);
+                        select.add(option);
+                    }
+                }
+                oEvent = new Event('change',{"bubbles":true, "cancelable":false});
+                select.dispatchEvent(oEvent);
+            }
+            
+            updatePeriodos = function(){
+                var data = {  };
+                var init = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                };
+                url = "{{ url_for('periodo_get') }}"
+                fetch(url,init).then(data => data.json()).then(data => { 
+                    rebuildOptions('periodo-table',data);
+                });
+            };
+
+            updateAvailablePeriodo = function (){
+                var data = { editable: true };
+                var init = {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                };
+                url = "{{ url_for('periodo_get') }}"
+                fetch(url,init).then(data => data.json()).then(data => { 
+                    rebuildOptions('periodo',data);
+                });
+            }
+
+            document.forms[0].addEventListener("submit",function(event){
+                event.preventDefault();
+                const form = document.getElementById('nuevo');
+                const data = new FormData(form);
+                var init = {
+                    method: "POST",
+                    body: data
+                };
+                url = "{{ url_for('procesar_solicitud') }}";
+                fetch(url,init).then(data => data.json()).then(data => { 
+                        updateData(); 
+                });
+            });
+
+            updateUnidad = function(){
+                select=document.getElementById("selectbox")
+                unidad=select.options[select.options.selectedIndex].attributes['data-unidad'];
+                document.getElementById("unidad").textContent=unidad.nodeValue;
+                document.getElementsByName("cantidad")[0].value="0";
+            }
+
+            document.getElementById("editValue").addEventListener("click",function(event){
+                select = window.dataselect;
+                datatable = window.datatable;
+                //select=document.getElementsByTagName("select")[0];
+                if(datatable.selectedRow != null){
+                    select.SetOption({
+                        type: "byValue",
+                        value: datatable.data[datatable.selectedRow.dataIndex].cells[0].data
+                    });
+                    //select.value=datatable.selectedRow.dataIndex;
+                    document.getElementsByName("cantidad")[0].value = datatable.data[datatable.selectedRow.dataIndex].cells[3].data
+                } 
+            });
+
+            document.getElementById("delValue").addEventListener("click",function(event){
+                var dialog = document.getElementById('dlgBorrar');
+                dialog.showModal();
+            });
+
+            document.querySelector('.dialog').addEventListener('close', function (event) {
+                var dialog = document.getElementById('dlgBorrar');
+                if (dialog.returnValue === 'Aceptar') { 
+                    var data = { id_material: datatable.data[datatable.selectedRow.dataIndex].cells[0].data };
+                    var init = {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    };
+                    url = "{{ url_for('solicitudes_delete') }}"
+                    fetch(url,init).then(data => data.json()).then(data => { 
+                        updateData();
+                    });
+                 }
+            });
+
+            document.getElementById("rightBtn").addEventListener("click",function(event){
+                select = document.getElementById("periodo-table");
+                indx = select.options.selectedIndex;
+                if(indx==0)
+                    indx = select.options.length - 1;
+                else
+                    indx -= 1;
+                select.options.selectedIndex = indx;
+                oEvent = new Event('change',{"bubbles":true, "cancelable":false});
+                select.dispatchEvent(oEvent);
+            });
+
+            document.getElementById("leftBtn").addEventListener("click",function(event){
+                select = document.getElementById("periodo-table");
+                indx = select.options.selectedIndex;
+                if( indx==select.options.length - 1 )
+                    indx = 0;
+                else
+                    indx += 1;
+                select.options.selectedIndex = indx;
+                oEvent = new Event('change',{"bubbles":true, "cancelable":false});
+                select.dispatchEvent(oEvent);
+            });
+
+            document.getElementById("periodo-table").addEventListener("change",function(event){
+                updateData();
+                bEnable = false
+                if(!event.target.options[0].hidden)
+                    bEnable=parseInt(event.target.options[event.target.options.selectedIndex].attributes["data-activo"].value);
+                document.getElementById("editValue").disabled=!bEnable;
+                document.getElementById("delValue").disabled=!bEnable;
+            });
+
+            document.getElementById("periodo").addEventListener("change",function(event){
+                bEnable = false
+                if(!event.target.options[0].hidden)
+                    bEnable=parseInt(event.target.options[event.target.options.selectedIndex].attributes["data-activo"].value);
+                document.getElementById("btnSave").disabled=!bEnable;
+                document.getElementById("btnReset").disabled=!bEnable;
+                document.getElementById("txtCantidad").disabled=!bEnable;
+            });
+
+        </script>
+        <style type="text/css">
+            tbody.captura td:nth-child(4){
+                text-align: end;
+            }
+        </style>
+    </body>
+</html>

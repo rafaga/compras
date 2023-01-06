@@ -1,0 +1,15 @@
+.DS_Store
+venv/
+__pycache__/
+instance/
+
+pre_pac.db
+
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/
+
+dist/
+build/
+*.egg-info/

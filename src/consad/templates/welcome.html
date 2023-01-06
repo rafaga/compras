@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+    <title>Consolidaci&oacute;n de Adquisiciones - Inicio</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ urls['topcoat'] }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ urls['compras'] }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ urls['flexbox'] }}" type="text/css"/>
+</head>
+<body class="welcome">
+  <div class="row header middle-xs">
+    <div class="col-lg start-lg"><div class="titulo box" style="padding-left: 1em;">Consolidación de adquisiciones</div></div>
+    <div class="col-xs-1 middle-xs "><div class="box"><a href="{{ url_for('about') }}">Acerca de</a></div></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 center-md">
+      <div class="box glass">
+        <p><b>Bienvenidos</b></p>
+        <p>Este es un sistema para la capturar y consolidar las necesidades de compras en las diferentes especialidades.</p>
+      </div>
+    </div>
+    <div class="col-md-6 center-md">
+      <div class="box glass">
+        <p>Usa el token para ingresar</p>
+        <form action="{{ url_for('login')}}" method="POST">
+          {% if tok %}
+          <input type="text" name="token" class="topcoat-text-input--large" value="{{ tok }}" placeholder="Token">
+          {% else %}
+          <input type="text" name="token" class="topcoat-text-input--large" value="" placeholder="Token">
+          {% endif %}
+          <input class="topcoat-button--large--cta" type="submit" value="Ingresar"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

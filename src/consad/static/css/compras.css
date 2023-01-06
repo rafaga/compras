@@ -1,0 +1,103 @@
+.welcome {
+    background-image: url('/static/sufyan-pc7yGTMBIzw-unsplash.jpg');
+    background-size: 120%;
+    background-position: center;
+} 
+
+.about {
+    background-image: url('/static/kari-shea-1SAnrIxw5OY-unsplash.jpg');
+    background-size: 110%;
+    background-position:top;
+} 
+
+.header {
+    background-color: #e6eae9;
+    color: #454545;
+    padding: 1em;
+    margin-top: 0px !important;
+}
+
+.titulo {
+    font-size: larger;
+}
+
+.glass {
+    backdrop-filter: blur(6px);
+    background: rgba(230, 234, 233, 0.4);
+    margin: 2em;
+    border-radius: 1em;
+    padding: 1em;
+    box-shadow: 0px 0px 15px #454545;
+}
+
+.docnav{
+    background: #595B5B;
+    box-shadow: 0 0 0 1px #303233;
+    border: none;
+    border-top-color: currentcolor;
+    border-top-style: none;
+    border-top-width: medium;
+    border-top: 1px solid #737373;
+    color: #FFF;
+    text-shadow: 0 -1px 0 #000;
+    padding: 4px 8px 4px 8px;
+    -webkit-appearance: none;
+    border-radius: 3px;
+}
+
+.docnav option:checked{
+    background-color: #99c8ec;
+    color: #303232;
+}
+
+.docnav option{
+    background-color: #99c8ec;
+	border-left: 5px #1e7dc8 solid;
+	color: #303232;
+}
+
+
+.docnav:disabled{
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+div.row{
+    margin-top: 2px;
+}
+
+dialog::backdrop {
+    background-color: rgba(230, 234, 233, 0.1);
+    /*background-color: rgba(0, 0, 0, 0.8);*/
+    backdrop-filter: blur(6px);
+}
+
+.dialog {
+    border-radius: 1em;
+    border: 0px solid transparent ;
+    background-color: #666767;
+    padding: 0px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0px 0px 15px #454545;
+}
+
+.dialog-header {
+    background-color: #e6eae9;
+    padding: 1em;
+    padding-bottom: 0.5em;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.dialog-body {
+    color: #e6eae9;
+    padding: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.with-padding {
+    padding-top: 7px;
+}
