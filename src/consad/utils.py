@@ -6,14 +6,10 @@ import json
 from pathlib import Path
 from flask import url_for, current_app
 from flask.cli import AppGroup
-from sqlalchemy.orm import declarative_base
-import data_objects
+from data_object import ORMConnection, models
 
 config_cli = AppGroup('user')
 database_cli = AppGroup('database')
-
-Base = declarative_base()
-
 
 def get_res_url():
     """
@@ -79,9 +75,8 @@ def create_database():
     """
     Creates a database from scratch
     """
-    o_conn=data_objects.ORMConnection(current_app.config)
-    Base.metadata.create_all(o_conn.engine)
-
+    o_conn=ORMConnection(current_app.config)
+    models.Base.metadata.create_all(bind=o_conn.engine)
 
 @database_cli.command('migrate')
 def migrate_database():
