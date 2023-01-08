@@ -22,10 +22,16 @@ def configure_app(file):
         if config_type is None:
             return None
         subconf = obj_json.get(config_type)
-        if subconf["driver"] == 'SQLITE':
-            subconf["driver"] = database_driver.DatabaseType.SQLITE
-        if subconf["driver"] == 'MARIADB':
-            subconf["driver"] = database_driver.DatabaseType.MARIADB
+        if obj_json.get('secret_key') is not None:
+            subconf["secret_key"] = obj_json['secret_key']
+        if subconf.get('driver') is not None:
+            if subconf["driver"] == 'SQLITE':
+                subconf["driver"] = database_driver.DatabaseType.SQLITE
+                subconf['database'] = Path(current_app.instance_path).joinpath(subconf['database'])
+            if subconf["driver"] == 'MARIADB':
+                subconf["driver"] = database_driver.DatabaseType.MARIADB
+        else:
+            subconf["driver"] = database_driver.DatabaseType.NONE
     return subconf
 
 
@@ -39,7 +45,7 @@ def parse_flask_config(subconfig):
     # print(subconfig, file=sys.stdout)
     config["DRIVER"] = subconfig['driver']
     if subconfig['driver'] == database_driver.DatabaseType.SQLITE:
-        config["DATABASE"] = Path(current_app.instance_path).joinpath(subconfig['database'])
+        config["DATABASE"] = subconfig['database']
     if subconfig['driver'] == database_driver.DatabaseType.MARIADB:
         config["DATABASE"] = subconfig['database']
         config["USERNAME"] = subconfig['username']

@@ -35,6 +35,7 @@ class DatabaseDriver():
     @data_source.setter
     def data_source(self, ds_object):
         # a validation should be done here
+        # print('----------->',ds_object['database'], file=sys.stdout)
         if self.database_type == DatabaseType.SQLITE:
             cont = 0
             if ds_object is None:
@@ -105,8 +106,9 @@ class DatabaseDriver():
         return header[:16] == b'SQLite format 3\x00'
 
     def __create_connection(self, data_source):
+        # print('----------->',data_source['database'].resolve(), file=sys.stdout)
         if self.database_type == DatabaseType.SQLITE:
-            self.__connection = sqlite3.connect(data_source['database'])
+            self.__connection = sqlite3.connect(data_source['database'].resolve())
         if self.database_type == DatabaseType.MARIADB:
             try:
                 self.__connection = mariadb.connect(
@@ -125,5 +127,5 @@ class DatabaseDriver():
         if isinstance(obj_to_parse, Path):
             temp_object = obj_to_parse
         if isinstance(obj_to_parse, str):
-            temp_object = Path(obj_to_parse)
+            temp_object = obj_to_parse
         return temp_object

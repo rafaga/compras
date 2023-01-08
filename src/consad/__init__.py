@@ -6,6 +6,7 @@ main method that contains app factory
 # Autor: Rafael Amador Galván
 # Fecha: 11/07/2022
 import os
+import sys
 from pathlib import Path
 import json
 from datetime import datetime
@@ -46,6 +47,8 @@ def create_app():
 
     with app.app_context():
         # configure_app(Path(app.instance_path).joinpath('config.json').resolve(True))
+        # k = Path(app.instance_path).joinpath('config.json')
+        # print(k, file=sys.stdout)
         obj_ds = config_reader.configure_app(
             Path(app.instance_path).joinpath('config.json'))
         app.config.from_mapping(config_reader.parse_flask_config(obj_ds))
@@ -118,7 +121,7 @@ def create_app():
             cur = driver.connection.cursor()
             cur.execute(query)
             results = cur.fetchall()
-            if len(results) != 0:
+            if len(results) == 0:
                 results = None
             return render_template('catalogo.html', tipo='Materiales',
                                    urls=urls, columnas=cols, results=results)
@@ -135,7 +138,7 @@ def create_app():
             cur = driver.connection.cursor()
             cur.execute(query)
             results = cur.fetchall()
-            if len(results) != 0:
+            if len(results) == 0:
                 results = None
             return render_template('catalogo.html', tipo='Grupos de Materiales',
                                    urls=urls, columnas=cols, results=results)
@@ -154,7 +157,7 @@ def create_app():
             cur = driver.connection.cursor()
             cur.execute(query)
             results = cur.fetchall()
-            if len(results) != 0:
+            if len(results) == 0:
                 results = None
             return render_template('catalogo.html', tipo='Usuarios',
                                    urls=urls, columnas=cols, results=results)
@@ -171,7 +174,7 @@ def create_app():
             cur = driver.connection.cursor()
             cur.execute(query)
             results = cur.fetchall()
-            if len(results) != 0:
+            if len(results) == 0:
                 results = None
             return render_template('catalogo.html', tipo='Zonas',
                                    urls=urls, columnas=cols, results=results)
@@ -189,7 +192,7 @@ def create_app():
             cur = driver.connection.cursor()
             cur.execute(query)
             results = cur.fetchall()
-            if len(results) != 0:
+            if len(results) == 0:
                 results = None
             return render_template('catalogo.html', tipo='Departamentos',
                                    urls=urls, columnas=cols, results=results)

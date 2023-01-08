@@ -6,12 +6,13 @@ import json
 from pathlib import Path
 from flask import url_for, current_app
 from flask.cli import AppGroup
+from sqlalchemy.orm import declarative_base
 import data_objects
-
-
 
 config_cli = AppGroup('user')
 database_cli = AppGroup('database')
+
+Base = declarative_base()
 
 
 def get_res_url():
@@ -48,11 +49,11 @@ def create_config_file():
 
     json_obj = {}
     json_obj['config'] = 'sqlite'
+    json_obj['secret_key'] = ''
 
     # SQLITE parameters
     engine = {}
     engine['driver'] = 'SQLITE'
-    engine['secret_key'] = ''
     engine['database'] = 'database.db'
     json_obj['sqlite'] = engine.copy()
 
@@ -78,8 +79,8 @@ def create_database():
     """
     Creates a database from scratch
     """
-
-    raise NotImplementedError
+    o_conn=data_objects.ORMConnection(current_app.config)
+    Base.metadata.create_all(o_conn.engine)
 
 
 @database_cli.command('migrate')
