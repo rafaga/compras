@@ -36,13 +36,19 @@ def is_logged_in(session=None):
 
 
 @config_cli.command('create')
-def create_config_file():
+def create_config():
+    """
+    Prepare the configuration and create the config file
+    """
+    filename = 'config.json'
+    j_obj=prepare_config()
+    create_config_file(filename,j_obj)
+
+
+def prepare_config():
     """
     Creates an empty config file
     """
-    if Path(current_app.instance_path).joinpath('config.json').is_file():
-        Path(current_app.instance_path).joinpath('config.json').unlink()
-
     json_obj = {}
     json_obj['config'] = 'sqlite'
     json_obj['secret_key'] = ''
@@ -61,11 +67,21 @@ def create_config_file():
     engine['password'] = ''
     engine['port'] = 3306
     json_obj['mariadb'] = engine.copy()
+    return json_obj
 
+
+def create_config_file(filename, json_config):
+    """
+    Create a Filename with config object
+    """
     # encoding to JSON
     jenc = json.JSONEncoder()
-    json_str=jenc.encode(json_obj)
-    with open(Path(current_app.instance_path).joinpath('config.json'),
+    json_str=jenc.encode(json_config)
+
+    if Path(current_app.instance_path).joinpath(filename).is_file():
+        #Path(current_app.instance_path).joinpath(filename).unlink()
+        raise FileExistsError
+    with open(Path(current_app.instance_path).joinpath(filename),
           'wt', encoding='UTF-8') as file:
         file.write(json_str)
 

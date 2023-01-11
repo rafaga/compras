@@ -30,6 +30,11 @@ where = ["src"]
 "consad.static.img" = ["*.png","*.svg"]
 "consad.templates" = ["*.*"]
 
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src",
+]
+
 [project.urls]
 "Homepage" = "https://github.com/rafaga/compras"
 "Bug Tracker" = "https://github.com/rafaga/compras/issues"

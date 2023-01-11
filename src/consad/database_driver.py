@@ -52,8 +52,8 @@ class DatabaseDriver():
             if self.__data_source['database'].exists() and self.__data_source['database'].is_file():
                 if self.__is_sqlite3(self.__data_source['database']):
                     self.__create_connection(self.__data_source)
-            else:
-                self.__create_connection(self.__data_source)
+                    return
+            raise FileNotFoundError
         if self.database_type == DatabaseType.MARIADB:
             cont = 0
             if isinstance(ds_object, str):

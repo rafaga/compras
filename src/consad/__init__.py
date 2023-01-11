@@ -6,7 +6,6 @@ main method that contains app factory
 # Autor: Rafael Amador Galván
 # Fecha: 11/07/2022
 import os
-import sys
 from pathlib import Path
 import json
 from datetime import datetime
